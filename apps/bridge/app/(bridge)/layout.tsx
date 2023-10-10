@@ -1,9 +1,12 @@
 "use client";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi";
 import dynamic from "next/dynamic";
 import { WagmiConfig } from "wagmi";
 import { mainnet, optimism } from "wagmi/chains";
+
+const queryClient = new QueryClient();
 
 const chains = [mainnet, optimism];
 const projectId = "50c3481ab766b0e9c611c9356a42987b";
@@ -27,7 +30,11 @@ function Web3Provider({ children }: { children: React.ReactNode }) {
 }
 
 function RootLayout({ children }: { children: React.ReactNode }) {
-  return <Web3Provider>{children}</Web3Provider>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Web3Provider>{children}</Web3Provider>
+    </QueryClientProvider>
+  );
 }
 
 export default dynamic(() => Promise.resolve(RootLayout), { ssr: false });
