@@ -1,0 +1,24 @@
+{
+  "name": "web3modal-error",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "dependencies": {
+    "turbo": "^1.10.13",
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "@turbo/gen": "^1.10.13",
+    "eslint": "^7.32.0",
+    "eslint-config-custom": "workspace:*",
+    "prettier": "^2.5.1"
+  },
+  "packageManager": "pnpm@7.15.0",
+  "engines": {
+    "node": ">=16 <17"
+  }
+}
