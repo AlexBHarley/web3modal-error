@@ -1,48 +1,29 @@
 "use client";
 
-import "@rainbow-me/rainbowkit/styles.css";
-
-import { RainbowKitProvider, getDefaultWallets } from "@rainbow-me/rainbowkit";
+import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi";
 import dynamic from "next/dynamic";
-import { useMemo } from "react";
-import { WagmiConfig, configureChains, createConfig, mainnet } from "wagmi";
-import { optimism } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
+import { WagmiConfig } from "wagmi";
+import { mainnet, optimism } from "wagmi/chains";
+
+const chains = [mainnet, optimism];
+const projectId = "50c3481ab766b0e9c611c9356a42987b";
+const metadata = {
+  name: "Web3Modal",
+  description: "Web3Modal Example",
+  url: "https://web3modal.com",
+  icons: ["https://avatars.githubusercontent.com/u/37784886"],
+};
+
+const wagmiConfig = defaultWagmiConfig({
+  chains,
+  projectId,
+  metadata,
+});
+
+createWeb3Modal({ wagmiConfig, projectId, chains });
 
 function Web3Provider({ children }: { children: React.ReactNode }) {
-  const { chains, wagmiConfig } = useMemo(() => {
-    const { chains, publicClient } = configureChains(
-      [mainnet, optimism],
-      [publicProvider()]
-    );
-
-    const { connectors } = getDefaultWallets({
-      appName: "Superbridge",
-      projectId: "50c3481ab766b0e9c611c9356a42987b",
-      chains,
-    });
-
-    const wagmiConfig = createConfig({
-      autoConnect: true,
-      connectors,
-      publicClient,
-    });
-    return { chains, wagmiConfig };
-  }, []);
-
-  return (
-    <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider
-        chains={chains}
-        appInfo={{
-          appName: "Superbridge",
-          learnMoreUrl: "https://superbridge.app/help",
-        }}
-      >
-        {children}
-      </RainbowKitProvider>
-    </WagmiConfig>
-  );
+  return <WagmiConfig config={wagmiConfig}>{children}</WagmiConfig>;
 }
 
 function RootLayout({ children }: { children: React.ReactNode }) {
